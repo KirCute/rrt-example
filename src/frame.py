@@ -1,13 +1,14 @@
 import pygame
 import time
 from graphics import Tree
+from typing import Tuple, List
 
 
 def mult(x1, y1, x2, y2, x3, y3) -> float:
     return (x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3)
 
 
-def checkCross(lineA: tuple, lineB: tuple) -> bool:
+def checkCross(lineA: Tuple[float, float, float, float], lineB: Tuple[float, float, float, float]) -> bool:
     if max(lineA[0], lineB[2]) < min(lineB[0], lineB[2]):
         return False
     if max(lineA[1], lineA[3]) < min(lineB[1], lineB[3]):
@@ -38,7 +39,7 @@ class World:
         self.steep = 60.
         self._tree = Tree(self)
 
-    def addPolygon(self, polygon: tuple) -> None:
+    def addPolygon(self, polygon: List[Tuple[float, float]]) -> None:
         edge = []
         for i in range(-1, len(polygon) - 1):
             edge.append((polygon[i][0], polygon[i][1], polygon[i + 1][0], polygon[i + 1][1]))
@@ -60,7 +61,7 @@ class World:
                     running = False
             time.sleep(self.delay)
 
-    def checkEdgeValid(self, line: tuple) -> bool:
+    def checkEdgeValid(self, line: Tuple[float, float, float, float]) -> bool:
         if line[0] < 0 or line[0] > self.size[0]:
             return False
         if line[1] < 0 or line[1] > self.size[1]:
@@ -75,7 +76,7 @@ class World:
                     return False
         return True
 
-    def checkNodeValid(self, point: tuple) -> bool:
+    def checkNodeValid(self, point: Tuple[float, float]) -> bool:
         if point[0] < 0 or point[0] > self.size[0]:
             return False
         if point[1] < 0 or point[1] > self.size[1]:

@@ -1,13 +1,14 @@
 import pygame
 import math
 import random
+from typing import Tuple, Optional
 
 
-def distanceSqr(pointA: tuple, pointB: tuple) -> float:
+def distanceSqr(pointA: Tuple[float, float], pointB: Tuple[float, float]) -> float:
     return (pointA[0] - pointB[0]) ** 2 + (pointA[1] - pointB[1]) ** 2
 
 
-def normalize(pointA: tuple, pointB: tuple, steep) -> tuple:
+def normalize(pointA: Tuple[float, float], pointB: Tuple[float, float], steep: float) -> tuple:
     direction = (pointA[0] - pointB[0]), (pointA[1] - pointB[1])
     dis = math.sqrt(distanceSqr(pointA, pointB))
     steep = 1. if dis < steep else steep / dis
@@ -16,13 +17,13 @@ def normalize(pointA: tuple, pointB: tuple, steep) -> tuple:
 
 
 class Node:
-    def __init__(self, pos: tuple, parent):
+    def __init__(self, pos: Tuple[float, float], parent: Optional['Node']):
         self.pos = pos
         self.toTarget = False
         self.parent = parent
         self.children = []
 
-    def getMinDistance(self, world, pos: tuple, steep: float):
+    def getMinDistance(self, world: 'World', pos: Tuple[float, float], steep: float):
         nxt = normalize(self.pos, pos, steep)
         minPoint = None
         minNxt = None
@@ -39,7 +40,7 @@ class Node:
                 minDis = d
         return minPoint, minNxt, minDis
 
-    def expend(self, pos: tuple):
+    def expend(self, pos: Tuple[float, float]):
         child = Node(pos, self)
         self.children.append(child)
         return child
@@ -58,7 +59,7 @@ class Node:
 
 
 class Tree:
-    def __init__(self, world):
+    def __init__(self, world: 'World'):
         self._root = Node(world.origin, None)
         self._world = world
 
